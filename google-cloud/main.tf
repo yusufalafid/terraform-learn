@@ -10,13 +10,13 @@ terraform {
 provider "google" {
   credentials = file("dev.json")
 
-  project = "development-367406"
-  region  = "us-central1"
-  zone    = "us-central1-c"
+  project = var.project_name
+  region  = var.region
+  zone    = var.zone
 }
 
 resource "google_compute_network" "vpc_network" {
-  name = "terraform-network"
+  name = var.network_name
 }
 
 resource "google_compute_firewall" "vpc_network" {
@@ -33,13 +33,13 @@ resource "google_compute_firewall" "vpc_network" {
 }
 
 resource "google_compute_instance" "vm_instance" {
-  name         = "terraform-instance"
-  machine_type = "f1-micro"
-  tags	= ["web","dev"]
+  name         = var.vm_name
+  machine_type = var.flavor
+  tags	= ["dev","bastion"]
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-minimal-2004-lts"
+      image = var.osimage
     }
   }
 
@@ -49,5 +49,3 @@ resource "google_compute_instance" "vm_instance" {
     }
   }
 }
-
-
